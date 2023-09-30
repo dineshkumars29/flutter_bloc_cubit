@@ -1,6 +1,5 @@
 import 'dart:math';
-
-import 'package:bloccubit/bloc_example_2/bloc/theme_bloc.dart';
+import 'package:bloccubit/cubit_example_2/cubit/theme_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,20 +13,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ThemeBloc>(
-      create: (context) => ThemeBloc(),
-      child: BlocBuilder<ThemeBloc, ThemeState>(
-        builder: (context, state) {
-          return MaterialApp(
-            title: 'Flutter Demo',
-            theme: state.theme == Apptheme.light
-                ? ThemeData.light()
-                : ThemeData.dark(),
-            home: MyHomePage(),
-          );
-        },
-      ),
-    );
+    return BlocProvider<ThemeCubit>(
+        create: (context) => ThemeCubit(),
+        child: BlocBuilder<ThemeCubit, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp(
+              title: 'Flutter Demo',
+              theme: context.watch<ThemeCubit>().state.Clickme == AppTheme.light
+                  ? ThemeData.light()
+                  : ThemeData.dark(),
+              home: MyHomePage(),
+            );
+          },
+        ));
   }
 }
 
@@ -52,9 +50,7 @@ class MyHomePage extends StatelessWidget {
                   final int readInt = Random().nextInt(10);
                   print("$readInt ---->");
                   print("$isClick <----");
-                  context
-                      .read<ThemeBloc>()
-                      .add(ChangeThemeEvent(isClick: isClick));
+                  context.read<ThemeCubit>().changeTheme(readInt);
                 })),
       ),
     );
